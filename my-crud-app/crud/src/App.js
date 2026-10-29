@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import UserForm from './components/UserForm';
 import UserTable from './components/UserTable';
 import './App.css';
-const API_URL = 'http://localhost:5000/api/users';
+const API_URL = 'https://my-crud-backend-21k4.onrender.com/api/users';
 // const initialUsers=[
 //   {
 //   "id":1,
