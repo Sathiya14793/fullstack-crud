@@ -9,13 +9,27 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const pool = new Pool({
-  user: 'postgres',            // Default PostgreSQL user
-  host: 'localhost',           // Running on your local machine
-  database: 'crud_db',         // The database name you created in pgAdmin
-  password: 'admin123',   // <-- Replace with your PostgreSQL password
-  port: 5432                   // Default PostgreSQL port
-});
+// const pool = new Pool({
+//   user: 'postgres',            // Default PostgreSQL user
+//   host: 'localhost',           // Running on your local machine
+//   database: 'crud_db',         // The database name you created in pgAdmin
+//   password: 'admin123',   // <-- Replace with your PostgreSQL password
+//   port: 5432                   // Default PostgreSQL port
+// });
+const pool = new Pool(
+  process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false }
+      }
+    : {
+        user: 'postgres',
+        host: 'localhost',
+        database: 'crud_db',
+        password: 'YOUR_LOCAL_PASSWORD',
+        port: 5432
+      }
+);
 pool.connect((err) => {
   if (err) {
     console.error('Database connection error:', err.stack);
@@ -93,6 +107,7 @@ app.delete('/api/users/:id', async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log('Server is running on http://localhost:5000');
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
